@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imaginaria — Sélecteur de Couleurs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Fraunces:wght@300;400;600&family=DM+Sans:wght@300;400;500&family=Syne:wght@400;600;700&family=Libre+Baskerville:wght@400;700&family=Space+Mono&family=Outfit:wght@300;400;600&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-main: #f5f0e8;
+    --bg-sidebar: #1a1a2e;
+    --bg-card: #ffffff;
+    --bg-header: #1a1a2e;
+    --text-primary: #1a1a1a;
+    --text-secondary: #5a5a5a;
+    --text-header: #f5f0e8;
+    --text-card: #1a1a1a;
+    --accent: #c8495a;
+    --accent-text: #ffffff;
+    --btn-bg: #c8495a;
+    --btn-text: #ffffff;
+    --btn-secondary-bg: transparent;
+    --btn-secondary-text: #c8495a;
+    --btn-secondary-border: #c8495a;
+    --tag-bg: #e8e0d0;
+    --tag-text: #5a5a5a;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-ui: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ===== LAYOUT ===== */
+  .layout {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    grid-column: 1 / -1;
+    background: var(--bg-header);
+    color: var(--text-header);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .logo {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: var(--text-header);
+  }
+
+  .logo span {
+    color: var(--accent);
+  }
+
+  nav {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  nav a {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-header);
+    text-decoration: none;
+    opacity: 0.8;
+    cursor: default;
+    transition: opacity 0.2s;
+  }
+  nav a:hover { opacity: 1; }
+
+  /* ===== SIDEBAR ===== */
+  aside {
+    background: var(--bg-sidebar);
+    padding: 2rem 1.5rem;
+    transition: background 0.3s;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+
+  .sidebar-title {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-header);
+    opacity: 0.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.9rem;
+    border-radius: 8px;
+    color: var(--text-header);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    cursor: default;
+    opacity: 0.7;
+    transition: opacity 0.2s, background 0.2s;
+  }
+  .sidebar-item:hover { opacity: 1; background: rgba(255,255,255,0.08); }
+  .sidebar-item.active { opacity: 1; background: rgba(255,255,255,0.12); }
+
+  .sidebar-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.8;
+    flex-shrink: 0;
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  main {
+    padding: 2.5rem;
+    max-width: 960px;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .hero-text h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    transition: color 0.3s;
+  }
+
+  .hero-text h1 em {
+    color: var(--accent);
+    font-style: normal;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    transition: color 0.3s;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 0.7rem 1.4rem;
+    border-radius: 6px;
+    border: 2px solid var(--btn-bg);
+    cursor: default;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+  }
+
+  .btn-secondary {
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    border-color: var(--btn-secondary-border);
+  }
+
+  .hero-image {
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    position: relative;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ===== SECTION TITLES ===== */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: color 0.3s;
+  }
+
+  .section-tag {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ===== CARDS ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+
+  .card-img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-body {
+    padding: 1.2rem;
+  }
+
+  .card-label {
+    font-family: var(--font-ui);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+  }
+
+  .card-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-card);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    transition: color 0.3s;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    transition: color 0.3s;
+  }
+
+  .card-cta {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    cursor: default;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ===== FEATURED ===== */
+  .featured {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background: var(--bg-card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: background 0.3s;
+  }
+
+  .featured-img {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .featured-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .featured-eyebrow {
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    transition: color 0.3s;
+  }
+
+  .featured-title {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    transition: color 0.3s;
+  }
+
+  .featured-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    transition: color 0.3s;
+  }
+
+  /* ===== STATS ===== */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: background 0.3s;
+  }
+
+  .stat-number {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--accent);
+    transition: color 0.3s;
+  }
+
+  .stat-label {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+    transition: color 0.3s;
+  }
+
+  /* ===== BANNER CTA ===== */
+  .banner-cta {
+    background: var(--bg-header);
+    border-radius: 14px;
+    padding: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    transition: background 0.3s;
+  }
+
+  .banner-cta h2 {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-header);
+    transition: color 0.3s;
+  }
+
+  .banner-cta p {
+    color: var(--text-header);
+    opacity: 0.7;
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    transition: color 0.3s;
+  }
+
+  .banner-cta .btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ===== CONTROL PANEL ===== */
+  #ctrl-toggle {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 0.5rem;
+    border-radius: 8px 0 0 8px;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 1.1rem;
+    writing-mode: vertical-rl;
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: right 0.35s ease, background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  #ctrl-panel {
+    position: fixed;
+    right: -360px;
+    top: 0;
+    width: 360px;
+    height: 100vh;
+    background: #16161e;
+    color: #eee;
+    z-index: 999;
+    overflow-y: auto;
+    transition: right 0.35s ease;
+    box-shadow: -4px 0 30px rgba(0,0,0,0.3);
+    padding: 1.5rem;
+  }
+
+  #ctrl-panel.open {
+    right: 0;
+  }
+
+  #ctrl-panel.open + #ctrl-toggle {
+    right: 360px;
+  }
+
+  .ctrl-header {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ctrl-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .ctrl-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .ctrl-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .ctrl-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.7);
+    flex: 1;
+    white-space: nowrap;
+  }
+
+  .ctrl-row input[type="color"] {
+    width: 36px;
+    height: 26px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    background: none;
+    padding: 1px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .ctrl-row select {
+    background: #25252f;
+    color: #eee;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 5px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .btn-reset {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.65rem;
+    background: rgba(255,255,255,0.08);
+    color: #eee;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.14); }
+
+  /* color preview pill */
+  .color-preview {
+    width: 36px;
+    height: 26px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== CONTROL PANEL ===== -->
+<div id="ctrl-panel">
+  <div class="ctrl-header">
+    <span>🎨 Personnalisation</span>
+  </div>
+
+  <!-- FONDS -->
+  <div class="ctrl-section">
+    <div class="ctrl-section-title">Arrière-plans</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Fond principal</span>
+      <input type="color" id="c-bg-main" value="#f5f0e8" oninput="setVar('--bg-main',this.value)">
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Header / Sidebar</span>
+      <input type="color" id="c-bg-header" value="#1a1a2e" oninput="setVarMulti(['--bg-header','--bg-sidebar'],this.value)">
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Fond des cards</span>
+      <input type="color" id="c-bg-card" value="#ffffff" oninput="setVar('--bg-card',this.value)">
+    </div>
+  </div>
+
+  <!-- TEXTES -->
+  <div class="ctrl-section">
+    <div class="ctrl-section-title">Couleurs de texte</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Texte principal</span>
+      <input type="color" id="c-text-primary" value="#1a1a1a" oninput="setVarMulti(['--text-primary','--text-card'],this.value)">
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Texte secondaire</span>
+      <input type="color" id="c-text-secondary" value="#5a5a5a" oninput="setVar('--text-secondary',this.value)">
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Texte header</span>
+      <input type="color" id="c-text-header" value="#f5f0e8" oninput="setVar('--text-header',this.value)">
+    </div>
+  </div>
+
+  <!-- ACCENT -->
+  <div class="ctrl-section">
+    <div class="ctrl-section-title">Couleur d'accent</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Accent (tags, labels)</span>
+      <input type="color" id="c-accent" value="#c8495a" oninput="setVar('--accent',this.value)">
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Fond des badges</span>
+      <input type="color" id="c-tag-bg" value="#e8e0d0" oninput="setVar('--tag-bg',this.value)">
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Texte des badges</span>
+      <input type="color" id="c-tag-text" value="#5a5a5a" oninput="setVar('--tag-text',this.value)">
+    </div>
+  </div>
+
+  <!-- BOUTONS -->
+  <div class="ctrl-section">
+    <div class="ctrl-section-title">Boutons primaires</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Fond bouton</span>
+      <input type="color" id="c-btn-bg" value="#c8495a" oninput="setVar('--btn-bg',this.value)">
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Texte bouton</span>
+      <input type="color" id="c-btn-text" value="#ffffff" oninput="setVar('--btn-text',this.value)">
+    </div>
+    <div class="ctrl-section-title" style="margin-top:0.75rem">Boutons secondaires</div>
+    <div class="ctrl-row">
+      <span class="ctrl-label">Couleur bordure / texte</span>
+      <input type="color" id="c-btn-sec" value="#c8495a" oninput="setVarMulti(['--btn-secondary-text','--btn-secondary-border'],this.value)">
+    </div>
+  </div>
+
+  <!-- TYPOGRAPHIE -->
+  <div class="ctrl-section">
+    <div class="ctrl-section-title">Typographie</div>
+    <div class="ctrl-row" style="flex-direction:column;align-items:flex-start;gap:0.3rem">
+      <span class="ctrl-label">Police des titres</span>
+      <select id="s-font-heading" onchange="setVar('--font-heading',this.value)">
+        <option value="'Playfair Display', serif">Playfair Display</option>
+        <option value="'Fraunces', serif">Fraunces</option>
+        <option value="'Libre Baskerville', serif">Libre Baskerville</option>
+        <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+        <option value="'Syne', sans-serif">Syne</option>
+        <option value="'Outfit', sans-serif">Outfit</option>
+        <option value="'Space Mono', monospace">Space Mono</option>
+      </select>
+    </div>
+    <div class="ctrl-row" style="flex-direction:column;align-items:flex-start;gap:0.3rem;margin-top:0.5rem">
+      <span class="ctrl-label">Police du corps</span>
+      <select id="s-font-body" onchange="setVar('--font-body',this.value)">
+        <option value="'DM Sans', sans-serif">DM Sans</option>
+        <option value="'Outfit', sans-serif">Outfit</option>
+        <option value="'Syne', sans-serif">Syne</option>
+        <option value="'Fraunces', serif">Fraunces</option>
+        <option value="'Space Mono', monospace">Space Mono</option>
+        <option value="'Libre Baskerville', serif">Libre Baskerville</option>
+      </select>
+    </div>
+    <div class="ctrl-row" style="flex-direction:column;align-items:flex-start;gap:0.3rem;margin-top:0.5rem">
+      <span class="ctrl-label">Police UI (nav, boutons)</span>
+      <select id="s-font-ui" onchange="setVar('--font-ui',this.value)">
+        <option value="'Syne', sans-serif">Syne</option>
+        <option value="'Outfit', sans-serif">Outfit</option>
+        <option value="'DM Sans', sans-serif">DM Sans</option>
+        <option value="'Space Mono', monospace">Space Mono</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- PRESETS -->
+  <div class="ctrl-section">
+    <div class="ctrl-section-title">Thèmes prédéfinis</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
+      <button class="btn-reset" onclick="applyTheme('classique')">☀️ Classique</button>
+      <button class="btn-reset" onclick="applyTheme('nuit')">🌙 Nuit</button>
+      <button class="btn-reset" onclick="applyTheme('foret')">🌿 Forêt</button>
+      <button class="btn-reset" onclick="applyTheme('ocean')">🌊 Océan</button>
+      <button class="btn-reset" onclick="applyTheme('rose')">🌸 Rose</button>
+      <button class="btn-reset" onclick="applyTheme('mono')">◼ Mono</button>
+    </div>
+  </div>
+
+  <button class="btn-reset" onclick="resetAll()">↩ Réinitialiser</button>
+</div>
+
+<button id="ctrl-toggle" onclick="togglePanel()">
+  <span>⚙</span>
+  <span>Couleurs</span>
+</button>
+
+<!-- ===== SITE MOCK ===== -->
+<div class="layout">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">Imagin<span>aria</span></div>
+    <nav>
+      <a href="#">Découvrir</a>
+      <a href="#">Collections</a>
+      <a href="#">À propos</a>
+      <a href="#">Journal</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sidebar-title">Navigation</div>
+    <div class="sidebar-menu">
+      <div class="sidebar-item active">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Tableau de bord
+      </div>
+      <div class="sidebar-item">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Accueil
+      </div>
+      <div class="sidebar-item">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Explorations
+      </div>
+      <div class="sidebar-item">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Univers
+      </div>
+      <div class="sidebar-item">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Favoris
+      </div>
+      <div class="sidebar-item">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+        Mon compte
+      </div>
+      <div class="sidebar-item">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Créez des <em>mondes</em> qui n'existent pas encore</h1>
+        <p>Imaginaria est un espace où l'art, la nature et la rêverie se rencontrent. Explorez des univers singuliers construits par des créateurs du monde entier.</p>
+        <div class="btn-group">
+          <button class="btn btn-primary">Commencer l'exploration</button>
+          <button class="btn btn-secondary">En savoir plus</button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80" alt="Forêt mystérieuse">
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">12k</div>
+        <div class="stat-label">Créateurs actifs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">48k</div>
+        <div class="stat-label">Œuvres publiées</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">94%</div>
+        <div class="stat-label">Satisfaction</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">7</div>
+        <div class="stat-label">Continents représentés</div>
+      </div>
+    </div>
+
+    <!-- CARDS SECTION -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">Découvertes récentes</h2>
+        <span class="section-tag">Nouveautés</span>
+      </div>
+      <div class="cards-grid">
+
+        <div class="card">
+          <img class="card-img" src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=400&q=80" alt="Forêt">
+          <div class="card-body">
+            <div class="card-label">Nature & Silence</div>
+            <div class="card-title">Les forêts oubliées du Nord</div>
+            <div class="card-text">Un voyage immersif à travers des bois anciens où le temps semble suspendu entre deux saisons.</div>
+            <span class="card-cta">Explorer →</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <img class="card-img" src="https://images.unsplash.com/photo-1513326738677-b964603b136d?w=400&q=80" alt="Moscou">
+          <div class="card-body">
+            <div class="card-label">Architecture & Ville</div>
+            <div class="card-title">Moscou, architectures du rêve</div>
+            <div class="card-text">Des édifices impossibles et des palaces staliniens qui défient la gravité et l'imagination.</div>
+            <span class="card-cta">Découvrir →</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <img class="card-img" src="https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?w=400&q=80" alt="Lumière">
+          <div class="card-body">
+            <div class="card-label">Lumière & Matière</div>
+            <div class="card-title">L'or des fins d'après-midi</div>
+            <div class="card-text">Quand la lumière rasante transforme chaque surface ordinaire en une matière précieuse et vivante.</div>
+            <span class="card-cta">Voir plus →</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FEATURED -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">À la une</h2>
+        <span class="section-tag">Sélection</span>
+      </div>
+      <div class="featured">
+        <img class="featured-img" src="https://images.unsplash.com/photo-1513326738677-b964603b136d?w=600&q=80" alt="Moscou en hiver">
+        <div class="featured-body">
+          <div class="featured-eyebrow">Focus du mois</div>
+          <div class="featured-title">Moscou sous la neige — une capitale hors du temps</div>
+          <div class="featured-text">Cette série photographique explore les contrastes saisissants d'une ville où l'empire soviétique dialogue avec le présent digital. Dômes d'or et béton gris, marchés d'hiver et métros ornés comme des palais.</div>
+          <div class="btn-group">
+            <button class="btn btn-primary">Voir la série complète</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECOND CARD ROW -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">Collections thématiques</h2>
+        <span class="section-tag">Curated</span>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <img class="card-img" src="https://images.unsplash.com/photo-1542401886-65d6c61db217?w=400&q=80" alt="Ciel">
+          <div class="card-body">
+            <div class="card-label">Éléments</div>
+            <div class="card-title">Cieux traversés</div>
+            <div class="card-text">Des ciels capturés aux quatre coins du monde, entre tempête, aurore et calme plat.</div>
+            <span class="card-cta">Parcourir →</span>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img" src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=400&h=200&q=80" alt="Sous-bois">
+          <div class="card-body">
+            <div class="card-label">Intimité végétale</div>
+            <div class="card-title">Sous les canopées</div>
+            <div class="card-text">Une plongée dans l'architecture secrète des arbres, là où la lumière filtre en fragments d'or.</div>
+            <span class="card-cta">Entrer →</span>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img" src="https://images.unsplash.com/photo-1467773738059-6c0e25891dc5?w=400&q=80" alt="Montagne">
+          <div class="card-body">
+            <div class="card-label">Altitudes</div>
+            <div class="card-title">Au-delà des nuages</div>
+            <div class="card-text">Des sommets qui rappellent que la beauté exige parfois de la hauteur — physique ou intérieure.</div>
+            <span class="card-cta">S'élever →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANNER CTA -->
+    <div class="banner-cta">
+      <div>
+        <h2>Rejoignez la communauté Imaginaria</h2>
+        <p>Partagez vos créations, trouvez l'inspiration, collaborez avec d'autres visionnaires.</p>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary">Créer un compte</button>
+        <button class="btn btn-secondary" style="border-color:rgba(255,255,255,0.4);color:var(--text-header)">Se connecter</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // ===== Core helpers =====
+  function setVar(prop, val) {
+    document.documentElement.style.setProperty(prop, val);
+  }
+
+  function setVarMulti(props, val) {
+    props.forEach(p => setVar(p, val));
+  }
+
+  // ===== Panel toggle =====
+  function togglePanel() {
+    const panel = document.getElementById('ctrl-panel');
+    panel.classList.toggle('open');
+    const btn = document.getElementById('ctrl-toggle');
+    if (panel.classList.contains('open')) {
+      btn.style.right = '360px';
+    } else {
+      btn.style.right = '0';
+    }
+  }
+
+  // ===== Themes =====
+  const themes = {
+    classique: {
+      '--bg-main': '#f5f0e8',
+      '--bg-header': '#1a1a2e',
+      '--bg-sidebar': '#1a1a2e',
+      '--bg-card': '#ffffff',
+      '--text-primary': '#1a1a1a',
+      '--text-secondary': '#5a5a5a',
+      '--text-header': '#f5f0e8',
+      '--text-card': '#1a1a1a',
+      '--accent': '#c8495a',
+      '--btn-bg': '#c8495a',
+      '--btn-text': '#ffffff',
+      '--btn-secondary-text': '#c8495a',
+      '--btn-secondary-border': '#c8495a',
+      '--tag-bg': '#e8e0d0',
+      '--tag-text': '#5a5a5a',
+      '--font-heading': "'Playfair Display', serif",
+      '--font-body': "'DM Sans', sans-serif",
+      '--font-ui': "'Syne', sans-serif",
+    },
+    nuit: {
+      '--bg-main': '#0f0f18',
+      '--bg-header': '#07070f',
+      '--bg-sidebar': '#07070f',
+      '--bg-card': '#1a1a28',
+      '--text-primary': '#e8e4f0',
+      '--text-secondary': '#8880a0',
+      '--text-header': '#e8e4f0',
+      '--text-card': '#e8e4f0',
+      '--accent': '#a78bfa',
+      '--btn-bg': '#7c3aed',
+      '--btn-text': '#ffffff',
+      '--btn-secondary-text': '#a78bfa',
+      '--btn-secondary-border': '#a78bfa',
+      '--tag-bg': '#2a2040',
+      '--tag-text': '#a78bfa',
+      '--font-heading': "'Fraunces', serif",
+      '--font-body': "'DM Sans', sans-serif",
+      '--font-ui': "'Space Mono', monospace",
+    },
+    foret: {
+      '--bg-main': '#f0f4ee',
+      '--bg-header': '#1e3a2f',
+      '--bg-sidebar': '#1e3a2f',
+      '--bg-card': '#ffffff',
+      '--text-primary': '#1e3a2f',
+      '--text-secondary': '#4a6a58',
+      '--text-header': '#d4edd8',
+      '--text-card': '#1e3a2f',
+      '--accent': '#5a9e6f',
+      '--btn-bg': '#2d6a4f',
+      '--btn-text': '#ffffff',
+      '--btn-secondary-text': '#2d6a4f',
+      '--btn-secondary-border': '#2d6a4f',
+      '--tag-bg': '#d4edd8',
+      '--tag-text': '#2d6a4f',
+      '--font-heading': "'Libre Baskerville', serif",
+      '--font-body': "'Outfit', sans-serif",
+      '--font-ui': "'Syne', sans-serif",
+    },
+    ocean: {
+      '--bg-main': '#eef5f8',
+      '--bg-header': '#0a3d5c',
+      '--bg-sidebar': '#0a3d5c',
+      '--bg-card': '#ffffff',
+      '--text-primary': '#0a3d5c',
+      '--text-secondary': '#4a7a96',
+      '--text-header': '#cce8f4',
+      '--text-card': '#0a3d5c',
+      '--accent': '#0099cc',
+      '--btn-bg': '#006699',
+      '--btn-text': '#ffffff',
+      '--btn-secondary-text': '#006699',
+      '--btn-secondary-border': '#006699',
+      '--tag-bg': '#cce8f4',
+      '--tag-text': '#006699',
+      '--font-heading': "'Cormorant Garamond', serif",
+      '--font-body': "'DM Sans', sans-serif",
+      '--font-ui': "'Outfit', sans-serif",
+    },
+    rose: {
+      '--bg-main': '#fdf0f5',
+      '--bg-header': '#5c1a3a',
+      '--bg-sidebar': '#5c1a3a',
+      '--bg-card': '#ffffff',
+      '--text-primary': '#3a0a20',
+      '--text-secondary': '#9a5070',
+      '--text-header': '#f8d0e0',
+      '--text-card': '#3a0a20',
+      '--accent': '#e05080',
+      '--btn-bg': '#c02060',
+      '--btn-text': '#ffffff',
+      '--btn-secondary-text': '#c02060',
+      '--btn-secondary-border': '#c02060',
+      '--tag-bg': '#f8d0e0',
+      '--tag-text': '#c02060',
+      '--font-heading': "'Playfair Display', serif",
+      '--font-body': "'Outfit', sans-serif",
+      '--font-ui': "'Syne', sans-serif",
+    },
+    mono: {
+      '--bg-main': '#f8f8f8',
+      '--bg-header': '#111111',
+      '--bg-sidebar': '#111111',
+      '--bg-card': '#ffffff',
+      '--text-primary': '#111111',
+      '--text-secondary': '#666666',
+      '--text-header': '#f0f0f0',
+      '--text-card': '#111111',
+      '--accent': '#111111',
+      '--btn-bg': '#111111',
+      '--btn-text': '#ffffff',
+      '--btn-secondary-text': '#111111',
+      '--btn-secondary-border': '#111111',
+      '--tag-bg': '#e8e8e8',
+      '--tag-text': '#444444',
+      '--font-heading': "'Space Mono', monospace",
+      '--font-body': "'Space Mono', monospace",
+      '--font-ui': "'Space Mono', monospace",
+    }
+  };
+
+  function applyTheme(name) {
+    const t = themes[name];
+    if (!t) return;
+    Object.entries(t).forEach(([prop, val]) => setVar(prop, val));
+    // sync color inputs
+    syncInputs(t);
+  }
+
+  function syncInputs(t) {
+    // Sync color pickers
+    const colorMap = {
+      'c-bg-main': '--bg-main',
+      'c-bg-header': '--bg-header',
+      'c-bg-card': '--bg-card',
+      'c-text-primary': '--text-primary',
+      'c-text-secondary': '--text-secondary',
+      'c-text-header': '--text-header',
+      'c-accent': '--accent',
+      'c-btn-bg': '--btn-bg',
+      'c-btn-text': '--btn-text',
+      'c-btn-sec': '--btn-secondary-text',
+      'c-tag-bg': '--tag-bg',
+      'c-tag-text': '--tag-text',
+    };
+    Object.entries(colorMap).forEach(([id, prop]) => {
+      const el = document.getElementById(id);
+      if (el && t[prop]) el.value = t[prop];
+    });
+    // Sync font selects
+    const fontMap = {
+      's-font-heading': '--font-heading',
+      's-font-body': '--font-body',
+      's-font-ui': '--font-ui',
+    };
+    Object.entries(fontMap).forEach(([id, prop]) => {
+      const el = document.getElementById(id);
+      if (el && t[prop]) el.value = t[prop];
+    });
+  }
+
+  function resetAll() {
+    applyTheme('classique');
+  }
+</script>
+</body>
+</html>
